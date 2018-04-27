@@ -17,6 +17,10 @@ const RINGS = 6;
 const PLANE_WIDTH = 400;
 const PLANE_HEIGTH = 200;
 const PLANE_QUALITY = 10;
+
+const PLANE_WIDTH2 = 700;
+const PLANE_HEIGTH2 = 400;
+const PLANE_QUALITY2 = 10;
 //Atributos de las palas
 const PADDLE_WITH = 10;
 const PADDLE_HEIGTH = 30;
@@ -100,25 +104,21 @@ function createScene()
 
     // Add the camera to the scene
     scene.add(camera);
-
+    renderer.setClearColor( 0x248bcb, 1 );
     // Start the renderer
     renderer.setSize(WIDTH, HEIGHT);
-
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     // Attach the renderer-supplied DOM element.
     container.appendChild(renderer.domElement);
 }
-
-/*function addTexture(){
-  texture  = new THREE.TextureLoader().setPath( 'campo.jpg' );
-
-}*/
 
 function addMesh()
 {
   //MATERIALES
   var material = new THREE.MeshLambertMaterial(
       {
-        color: 0xFFFF00,
+        color: 0xf77575,
       });
   var texture  = new THREE.TextureLoader().load( 'http://localhost:8000/Textures/campo.jpg' );
   var material2 = new THREE.MeshBasicMaterial(
@@ -131,9 +131,15 @@ function addMesh()
         map: texture2,
       });
 
-  var material4 = new THREE.MeshBasicMaterial(
+  var material4 = new THREE.MeshLambertMaterial(
       {
-        color: 0x00FF00,
+        color: 0xFF0000,
+      });
+  var material5 = new THREE.MeshLambertMaterial(
+      {
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.4,
       });
 //GEOMETRIAS
 var geometry = new THREE.SphereGeometry(
@@ -161,16 +167,23 @@ var geometry4 = new THREE.CubeGeometry(
     COLUMN_QUALITY
   );
 
+var geometry5 = new THREE.PlaneGeometry(
+    PLANE_WIDTH2,
+    PLANE_HEIGTH2,
+    PLANE_QUALITY2
+  );
+
   sphere = new THREE.Mesh(geometry, material3);
   plane  = new THREE.Mesh(geometry2, material2);
+  plane2  = new THREE.Mesh(geometry5, material5);
   playerPaddle  = new THREE.Mesh(geometry3, material);
   cpuPaddle  = new THREE.Mesh(geometry3, material);
-  columna =  new THREE.Mesh(geometry4, material);
-  columna2 =  new THREE.Mesh(geometry4, material);
-  columna3 =  new THREE.Mesh(geometry4, material);
-  columna4 =  new THREE.Mesh(geometry4, material);
-  columna5 =  new THREE.Mesh(geometry4, material);
-  columna6 =  new THREE.Mesh(geometry4, material);
+  columna =  new THREE.Mesh(geometry4, material4);
+  columna2 =  new THREE.Mesh(geometry4, material4);
+  columna3 =  new THREE.Mesh(geometry4, material4);
+  columna4 =  new THREE.Mesh(geometry4, material4);
+  columna5 =  new THREE.Mesh(geometry4, material4);
+  columna6 =  new THREE.Mesh(geometry4, material4);
   //POSICION DE LA CAMARA
   sphere.position.z = -295;
   playerPaddle.position.z = -300;
@@ -178,6 +191,7 @@ var geometry4 = new THREE.CubeGeometry(
   cpuPaddle.position.x = -180;
   cpuPaddle.position.z = -300;
   plane.position.z = -300;
+  plane2.position.z = -298;
   //Columna 1 Derecha
   columna.position.z = -280;
   columna.position.y = 100;
@@ -202,10 +216,23 @@ var geometry4 = new THREE.CubeGeometry(
   columna6.position.z = -280;
   columna6.position.y = -100;
   columna6.position.x = -150;
-  //camera.lookAt(scene);
-  //AÑADIMOS LOS OBJETOS
+  //Shadows
+  playerPaddle.castShadow = true;
+  cpuPaddle.castShadow = true;
+  plane2.receiveShadow = true;
+  columna.castShadow = true;
+  columna2.castShadow = true;
+  columna3.castShadow = true;
+  columna4.castShadow = true;
+  columna5.castShadow = true;
+  columna6.castShadow = true;
+
+  ////////////////////////
+  //AÑADIMOS LOS OBJETOS//
+  ////////////////////////
   scene.add(sphere);
   scene.add(plane);
+  scene.add(plane2);
   scene.add(playerPaddle);
   scene.add(cpuPaddle);
   scene.add(columna);
@@ -218,15 +245,25 @@ var geometry4 = new THREE.CubeGeometry(
 
 function addLight()
 {
+
+  directionalLight = new THREE.DirectionalLight( 0xffffff, 1.0 );
+
+// Set its position
+    directionalLight.position.x = 0;
+    directionalLight.position.y = 400;
+    directionalLight.position.z = 100;
+    directionalLight.castShadow = true;
+
+// Add to the scene
+    scene.add(directionalLight);
     // Create a point light
-    pointLight =
-      new THREE.SpotLight(0x000000);
+    pointLight = new THREE.SpotLight(0xFFFFFF);
 
     // Set its position
-    pointLight.position.x = 0;
-    pointLight.position.y = 0;
-    pointLight.position.z = 300;
-
+    pointLight.position.x = -100;
+    pointLight.position.y = -600;
+    pointLight.position.z = -200;
+    pointLight.castShadow = true;
     // Add to the scene
     scene.add(pointLight);
 }
@@ -295,9 +332,6 @@ function cpuFollow() {
    if(Key.isDown(Key.SPACE)){
      restartGame();
    }
-   /*if (Key.isDown(Key.W)){
-     draw();
-   }*/
  }
 
 function restartGame(){

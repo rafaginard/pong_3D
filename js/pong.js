@@ -39,7 +39,7 @@ var ballDirX = 1;
 var ballDirY = 1;
 var ballSpeed = 2;
 //CPU dificultad entre 0 y 1
-var difficulty = 0.02
+var difficulty = 0.05
 //Puntuacion
 var playerScore = 0;
 var cpuScore = 0;
@@ -118,7 +118,7 @@ function addMesh()
   //MATERIALES
   var material = new THREE.MeshLambertMaterial(
       {
-        color: 0xFFFFFF,
+        color: 0xFFFF00,
       });
   var texture  = new THREE.TextureLoader().load( 'http://localhost:8000/Textures/campo.jpg' );
   var material2 = new THREE.MeshBasicMaterial(
@@ -129,6 +129,11 @@ function addMesh()
   var material3 = new THREE.MeshBasicMaterial(
       {
         map: texture2,
+      });
+
+  var material4 = new THREE.MeshBasicMaterial(
+      {
+        color: 0x00FF00,
       });
 //GEOMETRIAS
 var geometry = new THREE.SphereGeometry(
@@ -163,6 +168,9 @@ var geometry4 = new THREE.CubeGeometry(
   columna =  new THREE.Mesh(geometry4, material);
   columna2 =  new THREE.Mesh(geometry4, material);
   columna3 =  new THREE.Mesh(geometry4, material);
+  columna4 =  new THREE.Mesh(geometry4, material);
+  columna5 =  new THREE.Mesh(geometry4, material);
+  columna6 =  new THREE.Mesh(geometry4, material);
   //POSICION DE LA CAMARA
   sphere.position.z = -295;
   playerPaddle.position.z = -300;
@@ -182,6 +190,18 @@ var geometry4 = new THREE.CubeGeometry(
   columna3.position.z = -280;
   columna3.position.y = 100;
   columna3.position.x = -150;
+  //Columna 1 Izquierda
+  columna4.position.z = -280;
+  columna4.position.y = -100;
+  columna4.position.x = 150;
+  //Columna 2 Izquierda
+  columna5.position.z = -280;
+  columna5.position.y = -100;
+  columna5.position.x = 0;
+  //Columna 3 Izquierda
+  columna6.position.z = -280;
+  columna6.position.y = -100;
+  columna6.position.x = -150;
   //camera.lookAt(scene);
   //AÑADIMOS LOS OBJETOS
   scene.add(sphere);
@@ -191,16 +211,19 @@ var geometry4 = new THREE.CubeGeometry(
   scene.add(columna);
   scene.add(columna2);
   scene.add(columna3);
+  scene.add(columna4);
+  scene.add(columna5);
+  scene.add(columna6);
 }
 
 function addLight()
 {
     // Create a point light
     pointLight =
-      new THREE.SpotLight(0xFF0000);
+      new THREE.SpotLight(0x000000);
 
     // Set its position
-    pointLight.position.x = 200;
+    pointLight.position.x = 0;
     pointLight.position.y = 0;
     pointLight.position.z = 300;
 
